@@ -39,6 +39,19 @@ int newMotorControl = 0;
 int minServoVal = 1600;
 int maxServoVal = 7400;
 
+float Pgain = -1;
+float Dgain = 0;//.5;
+float Igain = 0;//-0.1;
+
+float maxI = 100;
+
+float pTerm = 0;
+float iTerm = 0;
+float dTerm = 0;
+
+int prevCommandMove = 0;
+
+
 
 int commandServo = 0;
 
@@ -397,7 +410,11 @@ void APP_Tasks(void) {
             
             // somewhere in APP_Tasks(), probably in case APP_STATE_SCHEDULE_READ
             // when you read data from the host
-            differentialSpeed = commandMove;
+            pTerm = commandMove*Pgain;
+            iTerm = Igain*commandMove+ iTerm;
+            dTerm = (commandMove - prevCommandMove)*Dgain;
+            
+            differentialSpeed = pTerm +iTerm - dTerm;
             
             
             // Calculate Desired Motor Speeds
