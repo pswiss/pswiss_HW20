@@ -237,6 +237,11 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
 
         }
 
+        String sendString = (String.valueOf((avgLineLocation-320)*3)) + '\n';
+        try {
+            sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+        } catch (IOException e) { }
+
         // draw a circle at some position
         int pos = (int) avgLineLocation;
         canvas.drawCircle(pos, targetLine, 5, paint1); // x position, y position, diameter, color
@@ -252,9 +257,9 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         mTextView.setText("FPS " + 1000 / diff);
         prevtime = nowtime;
     }
-}
 
-    private final SerialInputOutputManager.Listener mListener =
+
+    private final  SerialInputOutputManager.Listener mListener =
             new SerialInputOutputManager.Listener() {
                 @Override
                 public void onRunError(Exception e) {

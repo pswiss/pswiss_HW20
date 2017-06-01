@@ -45,11 +45,6 @@
             android:layout_width="640px"
             android:layout_height="480px" />
 
-        <TextView
-            android:id="@+id/textView02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="nothing from button yet" />
 
         <ScrollView
             android:id="@+id/ScrollView01"
@@ -57,18 +52,31 @@
             android:layout_height="250dip"
             android:layout_weight="0.92">
 
-            <TextView
-                android:id="@+id/textView03"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/holo_green_light"
-                android:text="nothing from usb yet" />
-
-            <TextureView
-                android:id="@+id/textureview"
-                android:layout_width="640px"
-                android:layout_height="480px" />
         </ScrollView>
+
+        <TextureView
+            android:id="@+id/textureview"
+            android:layout_width="640px"
+            android:layout_height="480px" />
+
+        <TextView
+            android:id="@+id/textView02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="nothing from button yet" />
+
+        <TextView
+            android:id="@+id/textView03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_green_light"
+            android:text="nothing from usb yet" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send slider value" />
 
     </LinearLayout>
 
