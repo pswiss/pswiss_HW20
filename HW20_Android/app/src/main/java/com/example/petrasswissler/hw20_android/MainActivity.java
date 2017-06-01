@@ -56,7 +56,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity implements TextureView.SurfaceTextureListener{
+//AppCompat
+public class MainActivity extends Activity implements TextureView.SurfaceTextureListener{
 
     private Camera mCamera;
     private TextureView mTextureView;
@@ -168,95 +169,7 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         });
     }
 
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        mCamera = Camera.open();
-        Camera.Parameters parameters = mCamera.getParameters();
-        parameters.setPreviewSize(640, 480);
-        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY); // no autofocusing
-        parameters.setAutoExposureLock(true); // keep the white balance constant
-        parameters.setFlashMode(FLASH_MODE_TORCH);
-        //parameters.setColorEffect(EFFECT_NEGATIVE);
-        mCamera.setParameters(parameters);
-        mCamera.setDisplayOrientation(90); // rotate to portrait mode
 
-        try {
-            mCamera.setPreviewTexture(surface);
-            mCamera.startPreview();
-        } catch (IOException ioe) {
-            // Something bad happened
-        }
-    }
-
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        // Ignored, Camera does all the work for us
-    }
-
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        mCamera.stopPreview();
-        mCamera.release();
-        return true;
-    }
-
-    // the important function
-    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        // every time there is a new Camera preview frame
-        mTextureView.getBitmap(bmp);
-
-        int targetLine =  bmp.getHeight() / 2;
-
-        double avgLineLocation = 0;
-        double numLinePixels;
-
-
-        final Canvas c = mSurfaceHolder.lockCanvas();
-        if (c != null) {
-
-            avgLineLocation = 0;
-            numLinePixels = 0;
-
-            int thresh = myControl.getProgress(); // comparison value
-            int[] pixels = new int[bmp.getWidth()]; // pixels[] is the RGBA data
-
-            bmp.getPixels(pixels, 0, bmp.getWidth(), 0, targetLine, bmp.getWidth(), 1);
-
-            for (int i = 0; i < bmp.getWidth(); i++) {
-                // Look for line (not green)
-                if ((green(pixels[i]) - red(pixels[i])) < thresh) {
-                    pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
-                    avgLineLocation += i;
-                    numLinePixels += 1;
-                }
-            }
-            // update the row
-            bmp.setPixels(pixels, 0, bmp.getWidth(), 0, targetLine, bmp.getWidth(), 1);
-
-            // Calc the average line Location
-            avgLineLocation = avgLineLocation / (numLinePixels +0.001);
-
-
-
-        }
-
-        String sendString = (String.valueOf((avgLineLocation-320)*3)) + '\n';
-        try {
-            sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-        } catch (IOException e) { }
-
-        // draw a circle at some position
-        int pos = (int) avgLineLocation;
-        canvas.drawCircle(pos, targetLine, 5, paint1); // x position, y position, diameter, color
-
-        // write the pos as text
-        canvas.drawText("pos = " + pos, 10, 200, paint1);
-        c.drawBitmap(bmp, 0, 0, null);
-        mSurfaceHolder.unlockCanvasAndPost(c);
-
-        // calculate the FPS to see how fast the code is running
-        long nowtime = System.currentTimeMillis();
-        long diff = nowtime - prevtime;
-        mTextView.setText("FPS " + 1000 / diff);
-        prevtime = nowtime;
-    }
 
 
     private final  SerialInputOutputManager.Listener mListener =
@@ -367,6 +280,96 @@ public class MainActivity extends AppCompatActivity implements TextureView.Surfa
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        mCamera = Camera.open();
+        Camera.Parameters parameters = mCamera.getParameters();
+        parameters.setPreviewSize(640, 480);
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY); // no autofocusing
+        parameters.setAutoExposureLock(true); // keep the white balance constant
+        parameters.setFlashMode(FLASH_MODE_TORCH);
+        //parameters.setColorEffect(EFFECT_NEGATIVE);
+        mCamera.setParameters(parameters);
+        mCamera.setDisplayOrientation(90); // rotate to portrait mode
+
+        try {
+            mCamera.setPreviewTexture(surface);
+            mCamera.startPreview();
+        } catch (IOException ioe) {
+            // Something bad happened
+        }
+    }
+
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        // Ignored, Camera does all the work for us
+    }
+
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        mCamera.stopPreview();
+        mCamera.release();
+        return true;
+    }
+
+    // the important function
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+        // every time there is a new Camera preview frame
+        mTextureView.getBitmap(bmp);
+
+        int targetLine =  bmp.getHeight() / 2;
+
+        double avgLineLocation = 0;
+        double numLinePixels;
+
+
+        final Canvas c = mSurfaceHolder.lockCanvas();
+        if (c != null) {
+
+            avgLineLocation = 0;
+            numLinePixels = 0;
+
+            int thresh = myControl.getProgress(); // comparison value
+            int[] pixels = new int[bmp.getWidth()]; // pixels[] is the RGBA data
+
+            bmp.getPixels(pixels, 0, bmp.getWidth(), 0, targetLine, bmp.getWidth(), 1);
+
+            for (int i = 0; i < bmp.getWidth(); i++) {
+                // Look for line (not green)
+                if ((green(pixels[i]) - red(pixels[i])) < thresh) {
+                    pixels[i] = rgb(0, 255, 0); // over write the pixel with pure green
+                    avgLineLocation += i;
+                    numLinePixels += 1;
+                }
+            }
+            // update the row
+            bmp.setPixels(pixels, 0, bmp.getWidth(), 0, targetLine, bmp.getWidth(), 1);
+
+            // Calc the average line Location
+            avgLineLocation = avgLineLocation / (numLinePixels +0.001);
+
+
+
+        }
+
+        /*String sendString = (String.valueOf((avgLineLocation-320))) + '\n';
+        try {
+            sPort.write(sendString.getBytes(), 10); // 10 is the timeout
+        } catch (IOException e) { }*/
+
+        // draw a circle at some position
+        int pos = (int) avgLineLocation;
+        canvas.drawCircle(pos, targetLine, 5, paint1); // x position, y position, diameter, color
+
+        // write the pos as text
+        canvas.drawText("pos = " + pos, 10, 200, paint1);
+        c.drawBitmap(bmp, 0, 0, null);
+        mSurfaceHolder.unlockCanvasAndPost(c);
+
+        // calculate the FPS to see how fast the code is running
+        long nowtime = System.currentTimeMillis();
+        long diff = nowtime - prevtime;
+        mTextView.setText("FPS " + 1000 / diff);
+        prevtime = nowtime;
     }
 
 }
