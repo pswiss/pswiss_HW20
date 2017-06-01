@@ -275,8 +275,8 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
         String rxString = null;
         try {
             rxString = new String(data, "UTF-8"); // put the data you got into a string
-            myTextView3.append(rxString);
-            myScrollView.fullScroll(View.FOCUS_DOWN);
+            //myTextView3.append(rxString);
+            //myScrollView.fullScroll(View.FOCUS_DOWN);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -351,10 +351,10 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
 
         }
 
-        /*String sendString = (String.valueOf((avgLineLocation-320))) + '\n';
+        String sendString = (String.valueOf(-(avgLineLocation-320)*3)) + '\n';
         try {
             sPort.write(sendString.getBytes(), 10); // 10 is the timeout
-        } catch (IOException e) { }*/
+        } catch (IOException e) { }
 
         // draw a circle at some position
         int pos = (int) avgLineLocation;

@@ -416,7 +416,7 @@ void APP_Tasks(void) {
             
             differentialSpeed = pTerm +iTerm - dTerm;
             
-            
+            /*
             // Calculate Desired Motor Speeds
             if(differentialSpeed > 0)
             {
@@ -427,7 +427,23 @@ void APP_Tasks(void) {
             {
                 motorSpeedR = 1200 - abs(differentialSpeed);
                 motorSpeedL = 1200;
+            }*/
+            float amtToScaleNeg = 0.35;
+            
+            if(differentialSpeed > 0)
+            {
+                motorSpeedR = 500+differentialSpeed;
+                motorSpeedL = 500-differentialSpeed*amtToScaleNeg;
             }
+            else
+            {
+                motorSpeedR = 600+differentialSpeed*amtToScaleNeg;
+                motorSpeedL = 600-differentialSpeed;
+            }
+            
+            
+            
+            
             
             LATAbits.LATA1 = 1; // direction
             OC1RS = motorSpeedR; // velocity, 50%
