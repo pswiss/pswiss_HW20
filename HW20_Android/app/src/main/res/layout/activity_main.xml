@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.petrasswissler.hw14_pswissler.MainActivity">
+    tools:context="com.example.petrasswissler.hw20_android.MainActivity">
 
 
     <LinearLayout
@@ -17,6 +17,13 @@
         tools:layout_editor_absoluteY="16dp"
         android:weightSum="1">
 
+        <TextView
+            android:id="@+id/textView01"
+            android:text="Threshold Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
         <SeekBar
             android:id="@+id/seek1"
             android:layout_width="fill_parent"
@@ -28,18 +35,15 @@
             android:secondaryProgress="20" />
 
         <TextView
-            android:id="@+id/textView01"
+            android:id="@+id/cameraStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="initial value "
-            android:layout_weight="1.08" />
+            android:text="Nothing yet" />
 
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send slider value" />
+        <SurfaceView
+            android:id="@+id/surfaceview"
+            android:layout_width="640px"
+            android:layout_height="480px" />
 
         <TextView
             android:id="@+id/textView02"
@@ -59,6 +63,11 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_green_light"
                 android:text="nothing from usb yet" />
+
+            <TextureView
+                android:id="@+id/textureview"
+                android:layout_width="640px"
+                android:layout_height="480px" />
         </ScrollView>
 
     </LinearLayout>
